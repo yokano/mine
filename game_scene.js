@@ -39,6 +39,15 @@ var GameScene = Class.create(Scene, {
 		this.timer = new Timer();
 		this.addChild(this.timer);
 		this.timer.start();
+		
+		// タイマーのラベル
+		var timerLabel = new Label();
+		timerLabel.x = 580;
+		timerLabel.y = 30;
+		timerLabel.font = '50px sans-serif';
+		timerLabel.color = 'white';
+		timerLabel.text = 'Time';
+		this.addChild(timerLabel);
 	},
 	
 	/**

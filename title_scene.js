@@ -26,11 +26,49 @@ var TitleScene = Class.create(Scene, {
 		title.y = 50;
 		this.addChild(title);
 		
-		// ボタンを表示
+		// スタートボタンを表示
 		var startButton = new Button('start', game.startGame, 309, 101);
 		startButton.x = 30;
 		startButton.y = 430;
 		this.addChild(startButton);
+		
+		// あそびかたボタンを表示
+		var howtoButton = new Button('howto', game.showHowto, 183, 101);
+		howtoButton.x = 330;
+		howtoButton.y = 430;
+		this.addChild(howtoButton);
+		
+		// ランキングボタンを表示
+		var rankingButton = new Button('ranking', game.showRanking, 222, 107);
+		rankingButton.x = 530;
+		rankingButton.y = 425;
+		this.addChild(rankingButton);
+		
+		// 点滅するメッセージを表示
+		var message = new Label();
+		message.x = 250;
+		message.y = 380;
+		message.width = 500;
+		message.font = '30px serif';
+		message.color = 'white';
+		message.text = 'Press any key to start';
+		message.tl.fadeOut(40).fadeIn(20).loop();
+		this.addChild(message);
+		
+		// スペースキーを押したらゲーム開始
+		$(window).keydown(function(e) {
+			game.startGame();
+		});
+	},
+	
+	/**
+	 * シーン終了直前の処理
+	 * @memberOf TitleScene
+	 * @function
+	 */
+	onexit: function() {
+		// キーイベントの解除
+		$(window).unbind('keydown');
 	}
 });
 

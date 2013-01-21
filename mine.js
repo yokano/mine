@@ -63,6 +63,24 @@ var Game = Class.create(Core, {
 		var titleScene = new TitleScene();
 		game.popScene();
 		game.pushScene(titleScene);
+	},
+	
+	/**
+	 * 遊び方の表示
+	 * @memberOf Game
+	 * @function
+	 */
+	showHowto: function() {
+	
+	},
+	
+	/**
+	 * ランキングの表示
+	 * @memberof Game
+	 * @function
+	 */
+	showRanking: function() {
+	
 	}
 });
 

@@ -89,6 +89,7 @@ var GameScene = Class.create(Scene, {
 			// 不正解
 			else {
 				console.log('間違い');
+				this.timer.penalty(2);
 			}
 		}
 	},
@@ -370,6 +371,34 @@ var Timer = Class.create(Label, {
 		var sZero = (s < 10) ? '0' : '';
 		var msZero = (ms < 10) ? '0' : '';
 		this.text = sZero + s + ':' + msZero + ms;
+	},
+	
+	/**
+	 * ペナルティとして経過時間を増やす
+	 * @memberOf Time
+	 * @param {数値} sec 増やす秒数
+	 */
+	penalty: function(sec) {
+		this._baseFrame -= sec * game.fps;
+		
+		// 増えた秒数を表示する準備
+		var label = new Label();
+		label.text = '+' + sec + '秒';
+		label.font = '25px sans-serif';
+		label.color = 'white';
+		label.x = this.x - 10;
+		label.y = this.y + 50;
+		label.tl.hide();
+		this.parentNode.addChild(label);
+
+		// アニメーション実行
+		this.tl.then(function() {
+			this.color = 'red';
+			label.tl.fadeIn(10).and().moveBy(50, 0, 10);
+		}).moveBy(-10, 0, 3).moveBy(20, 0, 3).moveBy(-10, 0, 3).then(function() {
+			this.color = 'white';
+			label.tl.fadeOut(10).removeFromScene();
+		});
 	},
 	
 	/**

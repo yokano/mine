@@ -1,0 +1,6 @@
+# jsdocは無視
+out/*
+
+*.xcworkspacedata
+
+*.xcuserstate

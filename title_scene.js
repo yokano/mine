@@ -71,20 +71,3 @@ var TitleScene = Class.create(Scene, {
 		$(window).unbind('keydown');
 	}
 });
-
-/**
- * ボタンクラス
- * @class
- * @extend Sprite
- * @param {文字列} name ボタンを表す名前(start, howto, ranking のいずれか)
- * @param {関数} action ボタンが押された時に実行する関数
- * @param {数値} width ボタンの幅
- * @param {数値} height ボタンの高さ
- */
-var Button = Class.create(Sprite, {
-	initialize: function(name, action, width, height) {
-		Sprite.call(this, width, height);
-		this.image = game.assets[name + '_button.png'];
-		this.addEventListener(Event.TOUCH_START, action);
-	}
-});

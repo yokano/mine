@@ -48,6 +48,12 @@ var GameScene = Class.create(Scene, {
 		timerLabel.color = 'white';
 		timerLabel.text = 'Time';
 		this.addChild(timerLabel);
+		
+		// ギブアップボタン
+		var giveupButton = new Button('giveup', game.returnTitle, 217, 120);
+		giveupButton.x = 575;
+		giveupButton.y = 450;
+		this.addChild(giveupButton);
 	},
 	
 	/**
@@ -186,31 +192,31 @@ var Board = Class.create(Group, {
 	 * @function
 	 * @returns {オブジェクト} 座標を含むオブジェクト{x:X座標の数値, y:Y座標の数値}
 	 */
-	 getSize: function() {
-	 	return {x: this._width, y: this._height};
-	 },
-	 
-	 /**
-	  * 指定された座標のセルを返す
-	  * @memberOf Board
-	  * @function
-	  * @param {数値} x X座標
-	  * @param {数値} y Y座標
-	  * @returns {Cellオブジェクト} 指定された座標のセル
-	  */
-	  getCell: function(x, y) {
-	  	return this._cells[x][y];
-	  },
-	  
-	  /**
-	   * カーソルオブジェクトを取得する
-	   * @memberOf Board
-	   * @function
-	   * @returns {Cursorオブジェクト} カーソル
-	   */
-	   getCursor: function() {
-	   	return this._cursor;
-	   }
+	getSize: function() {
+		return {x: this._width, y: this._height};
+	},
+	
+	/**
+	 * 指定された座標のセルを返す
+	 * @memberOf Board
+	 * @function
+	 * @param {数値} x X座標
+	 * @param {数値} y Y座標
+	 * @returns {Cellオブジェクト} 指定された座標のセル
+	 */
+	getCell: function(x, y) {
+		return this._cells[x][y];
+	},
+
+	/**
+	 * カーソルオブジェクトを取得する
+	 * @memberOf Board
+	 * @function
+	 * @returns {Cursorオブジェクト} カーソル
+	 */
+	getCursor: function() {
+		return this._cursor;
+	}
 });
 
 /**

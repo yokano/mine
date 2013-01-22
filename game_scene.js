@@ -86,7 +86,7 @@ var GameScene = Class.create(Scene, {
 				
 				var pos = cursor.getPosition();
 				var size = this.board.getSize();
-				if(pos.x >= size.x - 1 && pos.y >= size.y - 1) {
+				if(pos.x >= size.width - 1 && pos.y >= size.height - 1) {
 					this.gameOver();
 				} else {
 					cursor.next();
@@ -122,6 +122,7 @@ var GameScene = Class.create(Scene, {
  * @property {数値} _height マス目の行数
  * @porperty {配列} _cells マス目の配列
  * @property {Cursorオブジェクト} _cursor カーソル
+ * @property {数値} _touchCount タッチされた回数。タッチ操作で数字をセットするときに使用する。
  * @see Cell
  */
 var Board = Class.create(Group, {
@@ -129,6 +130,7 @@ var Board = Class.create(Group, {
 	_height: 5,
 	_cells: [],
 	_cursor: null,
+	_touchCount: 0,
 	initialize: function() {
 		// 継承
 		Group.call(this);
@@ -189,16 +191,56 @@ var Board = Class.create(Group, {
 		
 		// カーソルの追加
 		this._cursor = new Cursor(this);
+		
+		// タッチイベントの追加
+		this.addEventListener(Event.TOUCH_START, this._touchStart);
+		this.addEventListener(Event.TOUCH_END, this._touchEnd);
+	},
+	
+	/**
+	 * タッチされた時の処理
+	 * @memberOf Board
+	 * @function
+	 * @param {Event} e タッチ座標が入ったイベントオブジェクト
+	 */
+	_touchStart: function(e) {
+		this._touchPosition = {};
+		this._touchPosition.x = e.localX;
+		this._touchPosition.y = e.localY;
+	},
+	
+	/**
+	 * タッチが終わった時の処理
+	 * @memberOf Board
+	 * @function
+	 * @param {Event} e タッチ座標が入ったイベントオブジェクト
+	 */
+	_touchEnd: function(e) {
+		var dx = Math.abs(this._touchPosition.x - e.localX);
+		var dy = Math.abs(this._touchPosition.y - e.localY);
+		
+		// フリックなら確定
+		if(dx + dy > 60) {
+			this.parentNode.keydown(this._touchCount.toString());
+			this._touchCount = 0;
+		}
+		// タップなら数値変更
+		else {
+			this._touchCount = (this._touchCount + 1) % 10;
+			this._cursor.getCell().showNumber(this._touchCount);
+		}
+		
+
 	},
 	
 	/**
 	 * ボードの大きさを取得する
 	 * @memberOf Board
 	 * @function
-	 * @returns {オブジェクト} 座標を含むオブジェクト{x:X座標の数値, y:Y座標の数値}
+	 * @returns {width:幅, height:高さ}
 	 */
 	getSize: function() {
-		return {x: this._width, y: this._height};
+		return {width: this._width, height: this._height};
 	},
 	
 	/**
@@ -257,13 +299,23 @@ var Cell = Class.create(Sprite, {
 	},
 	
 	/**
-	 * 数字を画面に表示する
+	 * 答えをマス目に表示する
 	 * @function
 	 * @memberOf Cell
 	 */
 	 showAnswer: function() {
-		this.frame = this.answer;
-	 	this.image = game.assets['numbers.png'];
+		this.showNumber(this.answer);
+	 },
+	 
+	 /**
+	  * 任意の数字をマス目に表示する
+	  * @function
+	  * @memberOf Cell
+	  * @param {数値} number 表示する数値
+	  */
+	 showNumber: function(number) {
+	 	this.frame = number;
+		this.image = game.assets['numbers.png'];
 	 }
 });
 Cell.WIDTH = 108;
@@ -296,7 +348,7 @@ var Cursor = Class.create(Sprite, {
 	next: function() {
 		var size = this.parentNode.getSize();
 		var isLast = function(position) {
-			return (position.x >= size.x - 1 && position.y >= size.y - 1);
+			return (position.x >= size.width - 1 && position.y >= size.height - 1);
 		};
 		
 		// カーソルが外にはみ出したらエラー
@@ -306,7 +358,7 @@ var Cursor = Class.create(Sprite, {
 		
 		// 座標の更新
 		this._position.x += 1;
-		if(this._position.x >= size.x) {
+		if(this._position.x >= size.width) {
 			this._position.x = 0;
 			this._position.y += 1;
 		}

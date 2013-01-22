@@ -1,7 +1,7 @@
 /**
  * タイトル画面
  * @class
- * @extend Scene
+ * @extends Scene
  */
 var TitleScene = Class.create(Scene, {
 	initialize: function() {

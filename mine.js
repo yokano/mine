@@ -5,7 +5,7 @@ var game;
 /**
  * ゲーム全体の管理をするクラス
  * @class
- * @extend Core
+ * @extends Core
  */
 var Game = Class.create(Core, {
 	/**
@@ -92,7 +92,7 @@ var Game = Class.create(Core, {
 /**
  * 汎用ボタンクラス
  * @class
- * @extend Sprite
+ * @extends Sprite
  * @param {文字列} name ボタンを表す名前(start, howto, ranking のいずれか)
  * @param {関数} action ボタンが押された時に実行する関数
  * @param {数値} width ボタンの幅

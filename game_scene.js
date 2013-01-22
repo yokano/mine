@@ -81,6 +81,7 @@ var GameScene = Class.create(Scene, {
 		
 			// 正解
 			if(targetCell.answer == key) {
+				game.assets['open.mp3'].play();
 				targetCell.showAnswer();
 				
 				var pos = cursor.getPosition();
@@ -94,7 +95,7 @@ var GameScene = Class.create(Scene, {
 
 			// 不正解
 			else {
-				console.log('間違い');
+				game.assets['miss.mp3'].play();
 				this.timer.penalty(2);
 			}
 		}
@@ -169,7 +170,8 @@ var Board = Class.create(Group, {
 					if(this._cells[x + dx][y + dy].bomb) {
 						count++;
 					}
-				} 			}
+				}
+			}
 			return count;
 		};
 		

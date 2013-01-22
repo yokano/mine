@@ -27,7 +27,10 @@ var Game = Class.create(Core, {
 			'start_button.png',
 			'ranking_button.png',
 			'howto_button.png',
-			'giveup_button.png'
+			'giveup_button.png',
+			'miss.mp3',
+			'open.mp3',
+			'start.mp3'
 		];
 		for(var i = 0; i < preloads.length; i++) {
 			this.preload(preloads[i]);
@@ -50,6 +53,7 @@ var Game = Class.create(Core, {
 	 * @function
 	 */
 	startGame: function() {
+		game.assets['start.mp3'].play();
 		var gameScene = new GameScene();
 		game.popScene();
 		game.pushScene(gameScene);

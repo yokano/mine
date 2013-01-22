@@ -107,8 +107,11 @@ var GameScene = Class.create(Scene, {
 	 * @function
 	 */
 	gameOver: function() {
-		alert('ゲームが終了したのでタイトル画面へ戻ります');
-		game.returnTitle();
+		this.timer.stop();
+		this.tl.delay(10).then(function() {
+			alert('ゲーム終了');
+			game.returnTitle();
+		});
 	}
 });
 

@@ -31,9 +31,9 @@ var Game = Class.create(Core, {
 			'miss.mp3',
 			'open.mp3',
 			'start.mp3',
+			'howto0.png',
 			'howto1.png',
-			'howto2.png',
-			'howto3.png'
+			'howto2.png'
 		];
 		for(var i = 0; i < preloads.length; i++) {
 			this.preload(preloads[i]);
@@ -79,9 +79,22 @@ var Game = Class.create(Core, {
 	 * @function
 	 */
 	showHowto: function() {
-		var sprite = new Sprite(800, 600);
-		sprite.image = game.assets['howto1.png'];
-		game.currentScene.addChild(sprite);
+		var pages = [];
+		
+		// ページの作成
+		for(var i = 0; i < 3; i++) {
+			var page = new Sprite(game.width, game.height);
+			page.image = game.assets['howto' + i + '.png'];
+			page.addEventListener(Event.TOUCH_START, function() {
+				this.tl.moveTo(-game.width, 0, 6).removeFromScene();
+			});
+			pages.push(page);
+		}
+		
+		// ページの表示
+		for(var i = 2; i >= 0; i--) {
+			game.currentScene.addChild(pages[i]);
+		}
 	},
 	
 	/**

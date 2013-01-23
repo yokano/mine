@@ -33,15 +33,15 @@ var TitleScene = Class.create(Scene, {
 		this.addChild(startButton);
 		
 		// あそびかたボタンを表示
-		var howtoButton = new Button('howto', game.showHowto, 183, 101);
-		howtoButton.x = 330;
+		var howtoButton = new Button('howto', game.showHowto, 242, 101);
+		howtoButton.x = 310;
 		howtoButton.y = 470;
 		this.addChild(howtoButton);
 		
 		// ランキングボタンを表示
-		var rankingButton = new Button('ranking', game.showRanking, 222, 107);
+		var rankingButton = new Button('ranking', game.showRanking, 234, 98);
 		rankingButton.x = 530;
-		rankingButton.y = 465;
+		rankingButton.y = 470;
 		this.addChild(rankingButton);
 		
 		// 点滅するメッセージを表示

@@ -30,7 +30,10 @@ var Game = Class.create(Core, {
 			'giveup_button.png',
 			'miss.mp3',
 			'open.mp3',
-			'start.mp3'
+			'start.mp3',
+			'howto1.png',
+			'howto2.png',
+			'howto3.png'
 		];
 		for(var i = 0; i < preloads.length; i++) {
 			this.preload(preloads[i]);
@@ -76,7 +79,9 @@ var Game = Class.create(Core, {
 	 * @function
 	 */
 	showHowto: function() {
-	
+		var sprite = new Sprite(800, 600);
+		sprite.image = game.assets['howto1.png'];
+		game.currentScene.addChild(sprite);
 	},
 	
 	/**

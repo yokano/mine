@@ -6,8 +6,11 @@ var game;
  * ゲーム全体の管理をするクラス
  * @class
  * @extends Core
+ * @property {オブジェクト} config ゲームの設定オブジェクト
  */
 var Game = Class.create(Core, {
+	config: null,
+	
 	/**
 	 * ゲームの初期化
 	 * @memberOf Game
@@ -36,11 +39,18 @@ var Game = Class.create(Core, {
 			'howto2.png',
 			'home_button.png',
 			'next_button.png',
-			'back_button.png'
+			'back_button.png',
+			'checkbox.png',
+			'check.png'
 		];
 		for(var i = 0; i < preloads.length; i++) {
 			this.preload(preloads[i]);
 		}
+		
+		// 設定の初期化
+		this.config = {
+			inputMethod: 'sequential'
+		};
 	},
 	
 	/**

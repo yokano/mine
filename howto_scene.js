@@ -55,9 +55,9 @@ var HowtoScene = Class.create(Scene, {
 	onenter: function() {
 		// ページリストの作成
 		this._pages = [];
-		this._pages.push(new Page(0, 'home', 'next'));
-		this._pages.push(new Page(1, 'back', 'next'));
-		this._pages.push(new Page(2, 'back', 'home'));
+		this._pages.push(new Page(0, 'home', 'next', false));
+		this._pages.push(new Page(1, 'back', 'next', true));
+		this._pages.push(new Page(2, 'back', 'home', true));
 		
 		// ページを表示
 		this.addChild(this._pages[2]);
@@ -76,15 +76,17 @@ var HowtoScene = Class.create(Scene, {
  * @class
  * @extends Group
  * @param {数値} number ページ番号
- * @param {文字列} leftButton 左側に表示するボタンの種類。
- * @param {文字列} rightButton 右側に表示するボタンの種類。
+ * @param {文字列} leftButton 左側に表示するボタンの種類
+ * @param {文字列} rightButton 右側に表示するボタンの種類
+ * @param {真理値} checkboxEnabled Trueならチェックボックスを表示する
  * @property {オブジェクト} _buttons ボタンが入っているオブジェクト。_buttons[kind]で参照する。kind = next/back/home。
+ * @property {オブジェクト} _check チェックマーク
  */
 var Page = Class.create(Group, {
 	_buttons: null,
 	
 	// コンストラクタ
-	initialize: function(number, leftButton, rightButton) {
+	initialize: function(number, leftButton, rightButton, checkboxEnabled) {
 		Group.call(this);
 		
 		// 画像の設定
@@ -108,6 +110,29 @@ var Page = Class.create(Group, {
 		this._buttons[rightButton].x = 700;
 		this._buttons[rightButton].y = 490;
 		this.addChild(this._buttons[rightButton]);
+		
+		// チェックボックスを追加
+		if(checkboxEnabled) {
+			var checkbox = new Sprite(53, 53);
+			checkbox.x = 720;
+			checkbox.y = 120;
+			checkbox.image = game.assets['checkbox.png'];
+
+			// タップされたらチェックを表示
+			checkbox.addEventListener(Event.TOUCH_START, function() {
+				var check = new Sprite(86, 75);
+				check.image = game.assets['check.png'];
+				check.x = 710;
+				check.y = 100;
+				self.addChild(check);
+
+				// チェックがタップされたら消す
+				check.addEventListener(Event.TOUCH_START, function() {
+					self.removeChild(this);
+				});
+			});
+			this.addChild(checkbox);
+		}
 	},
 	
 	/**

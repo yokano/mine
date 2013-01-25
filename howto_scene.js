@@ -68,6 +68,20 @@ var HowtoScene = Class.create(Scene, {
 		this.addEventListener(Event.RIGHT_BUTTON_DOWN, this.next);
 		this.addEventListener(Event.LEFT_BUTTON_DOWN, this.back);
 		this.addEventListener(Event.UP_BUTTON_DOWN, this.title);
+	},
+	
+	/**
+	 * チェックボックスがチェックされたら他のページのチェックをすべて外す
+	 * @function
+	 * @memberOf HowtoScene
+	 */
+	updateCheckboxes: function() {
+		for(var i = 0; i < this._pages.length; i++) {
+			var page = this._pages[i];
+			if(page._checkbox != null && page._checkbox._mode != game.config.inputMethod) {
+				page._checkbox.uncheck();
+			}
+		}
 	}
 });
 
@@ -80,10 +94,11 @@ var HowtoScene = Class.create(Scene, {
  * @param {文字列} rightButton 右側に表示するボタンの種類
  * @param {真理値} checkboxEnabled Trueならチェックボックスを表示する
  * @property {オブジェクト} _buttons ボタンが入っているオブジェクト。_buttons[kind]で参照する。kind = next/back/home。
- * @property {オブジェクト} _check チェックマーク
+ * @property {Checkboxオブジェクト} _checkbox チェックボックスオブジェクト。ページ内になければnull。
  */
 var Page = Class.create(Group, {
 	_buttons: null,
+	_checkbox: null,
 	
 	// コンストラクタ
 	initialize: function(number, leftButton, rightButton, checkboxEnabled) {
@@ -113,25 +128,14 @@ var Page = Class.create(Group, {
 		
 		// チェックボックスを追加
 		if(checkboxEnabled) {
-			var checkbox = new Sprite(53, 53);
-			checkbox.x = 720;
-			checkbox.y = 120;
-			checkbox.image = game.assets['checkbox.png'];
-
-			// タップされたらチェックを表示
-			checkbox.addEventListener(Event.TOUCH_START, function() {
-				var check = new Sprite(86, 75);
-				check.image = game.assets['check.png'];
-				check.x = 710;
-				check.y = 100;
-				self.addChild(check);
-
-				// チェックがタップされたら消す
-				check.addEventListener(Event.TOUCH_START, function() {
-					self.removeChild(this);
-				});
-			});
-			this.addChild(checkbox);
+			var mode = '';
+			if(number == 1) {
+				mode = 'sequential';
+			} else {
+				mode = 'parallel';
+			}
+			this._checkbox = new Checkbox(mode);
+			this.addChild(this._checkbox);
 		}
 	},
 	
@@ -143,5 +147,72 @@ var Page = Class.create(Group, {
 	 */
 	slide: function(direction) {
 		this.tl.moveBy(direction * game.width, 0, 6);
+	}
+});
+
+/**
+ * チェックボックスクラス
+ * @class
+ * @extends Group
+ * @param {文字列} mode チェックすることで有効化するモード名 game.config.inputMethod = 'モード名'
+ * @property {文字列} _mode モード名
+ */
+var Checkbox = Class.create(Group, {
+	_mode: '',
+	_checkmark: null,
+	
+	// コンストラクタ
+	initialize: function(mode) {
+		Group.call(this);
+		this._mode = mode;
+		this.x = 720;
+		this.y = 120;
+		
+		// チェックボックス作成
+		var box = new Sprite(53, 53);
+		box.image = game.assets['checkbox.png'];
+		box.addEventListener(Event.TOUCH_START, function() {
+			this.parentNode.check();
+		});
+		this.addChild(box);
+		
+		// 設定済みの項目にチェックを付ける
+		if(game.config.inputMethod == mode) {
+			this.check();
+		}
+	},
+	
+	/**
+	 * チェックボックスにチェックを入れて設定項目を変える
+	 * @function
+	 * @memberOf Checkbox
+	 */
+	check: function() {
+		game.config.inputMethod = this._mode;
+		
+		var checkmark = new Sprite(86, 75);
+		checkmark.x = -10;
+		checkmark.y = -20;
+		checkmark.image = game.assets['check.png'];
+		checkmark.addEventListener(Event.TOUCH_START, function() {
+			this.parentNode.uncheck();
+		});
+		this.addChild(checkmark);
+		this._checkmark = checkmark;
+		
+		// 他のページのチェックボックスを外す
+		if(this.parentNode != null) {
+			this.parentNode.parentNode.updateCheckboxes();
+		}
+	},
+	
+	/**
+	 * チェックボックスのチェックを外す
+	 * @function
+	 * @memberOf Checkbox
+	 */
+	uncheck: function() {
+		this.removeChild(this._checkmark);
+		this._checkmark = null;
 	}
 });

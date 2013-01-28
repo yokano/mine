@@ -41,7 +41,8 @@ var Game = Class.create(Core, {
 			'next_button.png',
 			'back_button.png',
 			'checkbox.png',
-			'check.png'
+			'check.png',
+			'ranking_background.png'
 		];
 		for(var i = 0; i < preloads.length; i++) {
 			this.preload(preloads[i]);
@@ -93,7 +94,7 @@ var Game = Class.create(Core, {
 	 */
 	showHowto: function() {
 		var howtoScene = new HowtoScene();
-		game.popScene()
+		game.popScene();
 		game.pushScene(howtoScene);
 	},
 	
@@ -103,8 +104,34 @@ var Game = Class.create(Core, {
 	 * @function
 	 */
 	showRanking: function() {
+		var rankingScene = new RankingScene();
+		game.popScene();
+		game.pushScene(rankingScene);
+	},
 	
-	}
+	/**
+	 * サーバからランキングを取得する
+	 * @memberOf Game
+	 * @function
+	 * @returns {オブジェクト} ランキングデータ
+	 */
+	 getRanking: function() {
+	 	var ranking = [
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+			{name: 'okano', time: 5000},
+		];
+		
+	 	
+	 	return ranking;
+	 }
 });
 
 /**

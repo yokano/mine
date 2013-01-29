@@ -110,7 +110,7 @@ var GameScene = Class.create(Scene, {
 		this.timer.stop();
 		this.tl.delay(10).then(function() {
 			if(window.confirm('ランキングにクリアタイムを送信しますか？', '名無し')) {
-				var name = window.prompt('登録名を入力してください');
+				var name = window.prompt('登録名を入力してください(14文字以内)');
 				$.ajax({
 					url: '/register',
 					dataType: 'json',
@@ -118,8 +118,8 @@ var GameScene = Class.create(Scene, {
 						name: name,
 						time: this.timer._toString(this.timer.getTime())
 					},
-					success: function() {
-						console.log('success');
+					success: function(data) {
+						alert('あなたは' + data.rank + '位です');
 					},
 					error: function() {
 						console.log('error');

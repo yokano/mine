@@ -21,9 +21,10 @@ var RankingScene = Class.create(Scene, {
 		
 		// ランキングを表示する
 		var ranking = game.getRanking();
-		console.log(ranking);
 		for(var i = 0; i < ranking.length; i++) {
-			var name = new Label();
+		
+			// 順位
+			var rank = new Label();
 			var termination = '';
 			if(i + 1 == 1) {
 				termination = 'st';
@@ -34,12 +35,31 @@ var RankingScene = Class.create(Scene, {
 			} else {
 				termination = 'th';
 			}
-			name.text = (i + 1) + termination + ': ' + ranking[i].name + ' ' + ranking[i].time;
-			name.font = 'xx-large cursive';
+			rank.text = (i + 1) + termination;
+			rank.font = 'x-large serif';
+			rank.color = '#006600';
+			rank.x = 50;
+			rank.y = 80 + 50 * i;
+			this.addChild(rank);
+
+			// プレイヤー名
+			var name = new Label();
+			name.text = ranking[i].name;
+			name.font = 'x-large cursive';
+			name.width = 150;
 			name.color = (i % 2 == 0) ? '#000000' : '#880000';
-			name.x = 50;
-			name.y = 60 + 50 * i;
+			name.x = 120;
+			name.y = 70 + 50 * i;
 			this.addChild(name);
+			
+			// クリアタイム
+			var time = new Label();
+			time.text = ranking[i].time;
+			time.font = 'xx-large cursive';
+			time.color = (i % 2 == 0) ? '#000000' : '#880000';
+			time.x = 300;
+			time.y = 60 + 50 * i;
+			this.addChild(time);
 		}
 		
 		// タップしたらタイトルへ戻る

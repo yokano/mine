@@ -49,6 +49,12 @@ var GameScene = Class.create(Scene, {
 		timerLabel.text = 'Time';
 		this.addChild(timerLabel);
 		
+		// キーパッド
+		var numberPad = new NumberPad();
+		numberPad.x = 570;
+		numberPad.y = 170;
+		this.addChild(numberPad);
+		
 		// ギブアップボタン
 		var giveupButton = new Button('giveup', game.returnTitle, 217, 120);
 		giveupButton.x = 575;
@@ -519,4 +525,47 @@ var Timer = Class.create(Label, {
 	}
 });
 
-
+/**
+ * 数字入力ボタン
+ * @class
+ */
+var NumberPad = Class.create(Group, {
+	initialize: function() {
+		Group.call(this);
+		
+		// ボタンの作成
+		var buttons = [];
+		for(var i = 0; i <= 9; i++) {
+			buttons[i] = new Sprite(108, 108);
+			buttons[i].image = game.assets['numbers.png'];
+			buttons[i].frame = i;
+			buttons[i].scaleX = 0.5;
+			buttons[i].scaleY = 0.5;
+			buttons[i].number = i;
+			buttons[i].addEventListener(Event.TOUCH_START, function() {
+				this.parentNode.parentNode.keydown(this.number);
+			});
+		}
+		
+		// 位置を調整 [行,列]
+		buttons[0].position = [1, 3];
+		buttons[1].position = [0, 2];
+		buttons[2].position = [1, 2];
+		buttons[3].position = [2, 2];
+		buttons[4].position = [0, 1];
+		buttons[5].position = [1, 1];
+		buttons[6].position = [2, 1];
+		buttons[7].position = [0, 0];
+		buttons[8].position = [1, 0];
+		buttons[9].position = [2, 0];
+		for(var i = 0; i < 10; i++) {
+			buttons[i].x = buttons[i].position[0] * 54;
+			buttons[i].y = buttons[i].position[1] * 54;
+		}
+		
+		// 画面に追加
+		for(var i = 0; i < 10; i++) {
+			this.addChild(buttons[i]);
+		}
+	}
+});

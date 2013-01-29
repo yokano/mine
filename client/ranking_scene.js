@@ -21,6 +21,7 @@ var RankingScene = Class.create(Scene, {
 		
 		// ランキングを表示する
 		var ranking = game.getRanking();
+		console.log(ranking);
 		for(var i = 0; i < ranking.length; i++) {
 			var name = new Label();
 			var termination = '';
@@ -33,7 +34,7 @@ var RankingScene = Class.create(Scene, {
 			} else {
 				termination = 'th';
 			}
-			name.text = (i + 1) + termination + ': ' + ranking[i].name + ' ' + ranking[i].time / 100 + ':' + ranking[i].time % 100;
+			name.text = (i + 1) + termination + ': ' + ranking[i].name + ' ' + ranking[i].time;
 			name.font = 'xx-large cursive';
 			name.color = (i % 2 == 0) ? '#000000' : '#880000';
 			name.x = 50;

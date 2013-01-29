@@ -116,19 +116,19 @@ var Game = Class.create(Core, {
 	 * @returns {オブジェクト} ランキングデータ
 	 */
 	 getRanking: function() {
-	 	var ranking = [
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-			{name: 'okano', time: 5000},
-		];
+	 	var ranking = [];
 		
+	 	$.ajax({
+			url: '/get',
+			dataType: 'json',
+			async: false,
+			success: function(data) {
+				ranking = data;
+			},
+			error: function(error) {
+				console.log('ERROR', error);
+			}
+		});
 	 	
 	 	return ranking;
 	 }

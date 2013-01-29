@@ -109,7 +109,23 @@ var GameScene = Class.create(Scene, {
 	gameOver: function() {
 		this.timer.stop();
 		this.tl.delay(10).then(function() {
-			alert('ゲーム終了');
+			if(window.confirm('ランキングにクリアタイムを送信しますか？', '名無し')) {
+				var name = window.prompt('登録名を入力してください');
+				$.ajax({
+					url: '/register',
+					dataType: 'json',
+					data: {
+						name: name,
+						time: this.timer._toString(this.timer.getTime())
+					},
+					success: function() {
+						console.log('success');
+					},
+					error: function() {
+						console.log('error');
+					}
+				});
+			}
 			game.returnTitle();
 		});
 	}
@@ -229,8 +245,6 @@ var Board = Class.create(Group, {
 			this._touchCount = (this._touchCount + 1) % 10;
 			this._cursor.getCell().showNumber(this._touchCount);
 		}
-		
-
 	},
 	
 	/**
@@ -428,12 +442,23 @@ var Timer = Class.create(Label, {
 	 * @function
 	 */
 	_update: function() {
-		var time = ( (game.frame - this._baseFrame) / game.fps);
+		var time = this.getTime();
+		this.text = this._toString(time);
+	},
+	
+	/**
+	 * タイムを画面表示用の文字列に変換する
+	 * @memberOf Timer
+	 * @function
+	 * @returns {文字列} 「秒:ミリ秒」形式の文字列
+	 * @param {数値} time 文字列に変換する時間
+	 */
+	_toString: function(time) {
 		var s = Math.floor(time);
 		var ms = Math.floor((time - s) * 100);
 		var sZero = (s < 10) ? '0' : '';
 		var msZero = (ms < 10) ? '0' : '';
-		this.text = sZero + s + ':' + msZero + ms;
+		return sZero + s + ':' + msZero + ms;
 	},
 	
 	/**
@@ -481,6 +506,16 @@ var Timer = Class.create(Label, {
 	 */
 	stop: function() {
 		this.clearEventListener(Event.ENTER_FRAME);
+	},
+	
+	/**
+	 * 時間を取得する
+	 * @memberOf Timer
+	 * @function
+	 * @returns {数値} 現在の時間（秒）
+	 */
+	getTime: function() {
+		return (game.frame - this._baseFrame) / game.fps;
 	}
 });
 

@@ -70,6 +70,10 @@ var GameScene = Class.create(Scene, {
 	onexit: function() {
 		// キーイベントを外す
 		$(window).unbind('keydown');
+		
+		// タップイベントを外す
+		$('body').unbind('touchstart');
+		$('body').unbind('touchend');
 	},
 			
 	/**
@@ -125,7 +129,7 @@ var GameScene = Class.create(Scene, {
 						time: this.timer._toString(this.timer.getTime())
 					},
 					success: function(data) {
-						alert('あなたは' + data.rank + '位です');
+						alert('ランキングに登録しました');
 					},
 					error: function() {
 						console.log('error');
@@ -144,7 +148,8 @@ var GameScene = Class.create(Scene, {
  * @property {数値} _height マス目の行数
  * @porperty {配列} _cells マス目の配列
  * @property {Cursorオブジェクト} _cursor カーソル
- * @property {数値} _touchCount タッチされた回数。タッチ操作で数字をセットするときに使用する。
+ * @property {数値} _touchCount タッチされた回数。game.config.inputMethod='sequential'の時に使う。
+ * @property {数値} _fingerCount 同時にタップされた指の本数。game.config.inputMethod='paralell'の時に使う。
  * @see Cell
  */
 var Board = Class.create(Group, {
@@ -153,6 +158,7 @@ var Board = Class.create(Group, {
 	_cells: [],
 	_cursor: null,
 	_touchCount: 0,
+	_fingerCount: 0,
 	initialize: function() {
 		// 継承
 		Group.call(this);
@@ -215,8 +221,43 @@ var Board = Class.create(Group, {
 		this._cursor = new Cursor(this);
 		
 		// タッチイベントの追加
-		this.addEventListener(Event.TOUCH_START, this._touchStart);
-		this.addEventListener(Event.TOUCH_END, this._touchEnd);
+		if(game.config.inputMethod == 'sequential') {
+			this.addEventListener(Event.TOUCH_START, this._touchStart);
+			this.addEventListener(Event.TOUCH_END, this._touchEnd);
+		} else if(game.config.inputMethod == 'parallel') {
+			var self = this;
+			
+			// 指が画面に触れた時の処理
+			$('body').bind('touchstart', function(e) {
+				self._fingerCount = e.originalEvent.touches.length;
+
+				// 最初の指の位置を取得
+				if(self._fingerCount == 1) {
+					self._touchPosition = {};
+					self._touchPosition.x = e.originalEvent.touches[0].clientX;
+					self._touchPosition.y = e.originalEvent.touches[0].clientY;
+				}
+			});
+			
+			// 指が画面から離れた時の処理
+			$('body').bind('touchend', function(e) {
+				if(self._fingerCount != 0) {
+				
+					// 指が離れた座標と、最初にタップした場所の距離を取得
+					var endPoint = e.originalEvent.changedTouches[0];
+					var dx = Math.abs(self._touchPosition.x - endPoint.clientX);
+					var dy = Math.abs(self._touchPosition.y - endPoint.clientY);
+
+					// スライドなら0、それ以外は指の本数を入力
+					if(self._fingerCount == 1 && dx + dy > 60) {
+						self.parentNode.keydown('0');
+					} else {
+						self.parentNode.keydown(self._fingerCount.toString());
+						self._fingerCount = 0;
+					}
+				}
+			});
+		}
 	},
 	
 	/**

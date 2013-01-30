@@ -19,6 +19,14 @@ var RankingScene = Class.create(Scene, {
 		background.image = game.assets['ranking_background.png'];
 		this.addChild(background);
 		
+		// ランキングのラベル
+		var label = new Label();
+		label.text = 'ランキング';
+		label.x = 40;
+		label.y = 45;
+		label.font = 'large sans-serif';
+		this.addChild(label);
+		
 		// ランキングを表示する
 		var ranking = game.getRanking();
 		for(var i = 0; i < ranking.length; i++) {

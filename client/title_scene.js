@@ -43,6 +43,10 @@ var TitleScene = Class.create(Scene, {
 		rankingButton.x = 530;
 		rankingButton.y = 470;
 		this.addChild(rankingButton);
+		
+		$(window).bind('keydown', function() {
+			$('#enchant-stage').css('width', '100%').css('height', '100%');
+		});
 	},
 	
 	/**

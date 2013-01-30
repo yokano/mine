@@ -1,6 +1,10 @@
 enchant();
 
 var game;
+window.onload = function() {
+	game = new Game(800, 600);
+	game.start();
+};
 
 /**
  * ゲーム全体の管理をするクラス
@@ -151,7 +155,3 @@ var Button = Class.create(Sprite, {
 	}
 });
 
-window.onload = function() {
-	game = new Game(800, 600);
-	game.start();
-};
